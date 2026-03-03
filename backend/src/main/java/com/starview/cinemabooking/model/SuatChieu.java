@@ -8,7 +8,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "SUAT_CHIEU")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuatChieu {

@@ -1,12 +1,15 @@
 package com.starview.cinemabooking.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "GHE_SUAT_CHIEU")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class GheSuatChieu {
