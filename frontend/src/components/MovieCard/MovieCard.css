@@ -1,0 +1,53 @@
+/* Định dạng thẻ chứa từng bộ phim */
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Căn chỉnh ảnh poster */
+.movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+/* Định dạng phần chữ bên dưới ảnh */
+.movie-info {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-info h3 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  min-height: 40px; /* Đảm bảo tiêu đề dài không làm lệch khung */
+}
+
+.movie-info p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+/* Định dạng nút Mua Vé */
+.book-btn {
+  background-color: #e32222;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: auto; /* Đẩy nút xuống dưới cùng */
+  width: 100%;
+}
+
+.book-btn:hover {
+  background-color: #c11c1c;
+}

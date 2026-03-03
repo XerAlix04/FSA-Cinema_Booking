@@ -1,0 +1,17 @@
+/* Thiết lập nền và phông chữ cho toàn bộ trang */
+.catalog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fdfbf7; /* Màu nền vàng nhạt giống trong ảnh */
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Chia lưới 4 cột cho danh sách phim */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Tạo 4 cột có kích thước bằng nhau */
+  gap: 30px; /* Khoảng cách giữa các phim */
+  margin-top: 20px;
+}
