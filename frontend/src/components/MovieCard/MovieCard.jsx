@@ -1,11 +1,33 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 import './MovieCard.css';
+import TrailerModal from '../TrailerModal/TrailerModal'; // Import component vừa tạo
+
 
 function MovieCard({ movie }) {
+   const [isTrailerVisible, setIsTrailerVisible] = useState(false);
+
+  // Hàm để mở modal trailer
+  const handlePlayTrailer = (e) => {
+    e.stopPropagation(); // Ngăn sự kiện click vào card (nếu có)
+    setIsTrailerVisible(true);
+  };
   return (
+    <>
     <div className="movie-card">
-      <img src={movie.posterUrl} alt={movie.tenPhim} className="movie-poster" />
+         <div className="poster-container">
+          <img
+            src={movie.posterUrl}
+            alt={movie.tenPhim}
+            className="movie-poster"
+          />
+          {/* Lớp phủ chứa nút Play, chỉ hiện khi hover */}
+          <div className="play-overlay" onClick={handlePlayTrailer}>
+            <svg className="play-icon" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
       <div className="movie-info">
         <h3>{movie.tenPhim}</h3>
         <p><strong>Thể loại:</strong> {movie.theLoai}</p>
@@ -15,18 +37,14 @@ function MovieCard({ movie }) {
         <button className="book-btn">Mua Vé</button>
       </div>
     </div>
+      {/* Render Modal nếu isTrailerVisible là true */}
+      {isTrailerVisible && (
+        <TrailerModal
+          trailerUrl={movie.trailerUrl}
+          onClose={() => setIsTrailerVisible(false)}
+        />
+      )}
+      </>
   );
 }
-
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    posterUrl: PropTypes.string.isRequired,
-    tenPhim: PropTypes.string.isRequired,
-    theLoai: PropTypes.string.isRequired,
-    thoiLuongPhut: PropTypes.number.isRequired,
-    danhGia: PropTypes.number.isRequired,
-    giaGoc: PropTypes.number.isRequired,
-  }).isRequired,
-};
-
 export default MovieCard;
