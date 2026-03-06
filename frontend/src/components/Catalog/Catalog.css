@@ -1,0 +1,50 @@
+/* Thiết lập nền và phông chữ cho toàn bộ trang */
+.catalog-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 40px 20px;
+  background-color: #fdfbf7;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  min-height: 100vh;
+}
+
+.catalog-container h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: #e32222;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e32222;
+  display: inline-block;
+  padding-bottom: 10px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Chia lưới 4 cột cho danh sách phim */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 240px); /* Card cố định 240px, không stretch */
+  justify-content: center; /* Căn giữa các card trong trang */
+  max-width: 1350px; /* Giới hạn chiều rộng để tối đa ~5 card/hàng */
+  margin: 20px auto; /* Căn giữa container lưới */
+  gap: 30px; /* Khoảng cách giữa các phim */
+}
+
+/* Hiệu ứng Loading Spinner xoay tròn */
+.loading-spinner {
+  border: 5px solid #f3f3f3; /* Màu xám nhạt */
+  border-top: 5px solid #e32222; /* Màu đỏ chủ đạo */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto; /* Căn giữa */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

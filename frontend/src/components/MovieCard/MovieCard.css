@@ -1,0 +1,97 @@
+/* Định dạng thẻ chứa từng bộ phim */
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng mượt mà */
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hiệu ứng khi di chuột vào thẻ phim */
+.movie-card:hover {
+  transform: scale(1.03); /* Phóng to nhẹ */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Đổ bóng sâu hơn */
+}
+
+/* Thêm container để chứa poster và nút play */
+.poster-container {
+  position: relative;
+}
+
+/* Căn chỉnh ảnh poster */
+.movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block; /* Loại bỏ khoảng trắng dưới ảnh */
+}
+
+/* Lớp phủ màu đen mờ hiện lên khi hover */
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-icon {
+  width: 60px;
+  height: 60px;
+  fill: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease;
+}
+
+/* Định dạng phần chữ bên dưới ảnh */
+.movie-info {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-info h3 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  min-height: 40px; /* Đảm bảo tiêu đề dài không làm lệch khung */
+}
+
+.movie-info p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+/* Định dạng nút Mua Vé */
+.book-btn {
+  background: linear-gradient(45deg, #e32222, #c11c1c); /* Màu gradient sang trọng */
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: auto; /* Đẩy nút xuống dưới cùng */
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.3s;
+}
+
+.book-btn:hover {
+  background: linear-gradient(45deg, #c11c1c, #9a1616);
+}

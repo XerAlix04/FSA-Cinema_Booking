@@ -1,0 +1,122 @@
+.header-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95); /* Nền trắng mờ */
+  backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  transition: all 0.3s ease;
+}
+
+
+.top-nav {
+  background-color: #fdfbf7;
+  text-align: right;
+  padding: 5px 10%;
+  font-size: 0.8rem;
+  color: #666;
+  border-bottom: 1px solid #ddd;
+}
+
+.top-nav span {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.top-nav span:hover {
+  color: #e71a0f;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  padding: 10px 10%;
+  justify-content: space-between;
+}
+
+.logo h1 {
+  color: #e71a0f;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-right: 3rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0 30px 0 auto; /* margin-left: auto (đẩy sang phải), margin-right: 30px (cách thanh tìm kiếm) */
+  padding: 0;
+  font-weight: 600;
+}
+
+.nav-links li {
+  cursor: pointer;
+  color: #333;
+}
+
+.nav-links li:hover, .nav-links li.active {
+  color: #e71a0f;
+}
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+/* Thanh tìm kiếm */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin-right: 20px;
+  transition: border-color 0.3s;
+}
+
+.search-box:focus-within {
+  border-color: #e71a0f;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.search-box button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0;
+  margin-left: 5px;
+  color: #666;
+}
+
+.search-box button:hover {
+  color: #e71a0f;
+}
+
+/* Nút mua vé */
+.buy-ticket-btn {
+  background: linear-gradient(45deg, #e71a0f, #c11c1c);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px; /* Bo tròn nút */
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(231, 26, 15, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.buy-ticket-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 26, 15, 0.4);
+}
