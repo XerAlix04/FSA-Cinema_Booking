@@ -122,6 +122,38 @@ function AdminMovieManager() {
     }
   };
 
+  // 6. Chức năng Xóa Vĩnh Viễn (Hard Delete) cho phim đã ẩn
+  const handleHardDelete = (id) => {
+    if (window.confirm('CẢNH BÁO: Bạn có chắc muốn xóa vĩnh viễn phim này khỏi cơ sở dữ liệu? Hành động này không thể hoàn tác!')) {
+      fetch(`${API_URL}/hard/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      })
+      .then(res => {
+        if (res.ok) {
+          fetchMovies(); // Reload lại danh sách
+        } else {
+          alert('Không thể xóa phim này.');
+        }
+      });
+    }
+  };
+
+  // 7. Chức năng Khôi phục (Restore)
+  const handleRestore = (id) => {
+    fetch(`${API_URL}/restore/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders()
+    })
+    .then(res => {
+      if (res.ok) {
+        fetchMovies(); // Reload lại danh sách
+      } else {
+        alert('Không thể khôi phục phim này.');
+      }
+    });
+  };
+
   // Hàm reset form về trạng thái thêm mới
   const resetForm = () => {
     setIsEditing(false);
@@ -220,7 +252,7 @@ function AdminMovieManager() {
           </thead>
           <tbody>
             {movies.map((movie) => (
-              <tr key={movie.id} style={{ opacity: movie.active ? 1 : 0.5 }}>
+              <tr key={movie.id} style={{ opacity: movie.isActive ? 1 : 0.5 }}>
                 <td>{movie.id}</td>
                 <td>
                   <img src={movie.posterUrl} alt="" className="poster-preview" />
@@ -232,15 +264,20 @@ function AdminMovieManager() {
                 <td>{movie.theLoai}</td>
                 <td>{movie.giaGoc?.toLocaleString()} đ</td>
                 <td>
-                  {movie.active ? 
+                  {movie.isActive ? 
                     <span style={{color: 'green', fontWeight: 'bold'}}>Đang chiếu</span> : 
                     <span style={{color: 'red'}}>Đã ẩn</span>
                   }
                 </td>
                 <td>
                   <button className="btn action-btn btn-edit" onClick={() => handleEdit(movie)}>Sửa</button>
-                  {movie.active && (
+                  {movie.isActive ? (
                     <button className="btn action-btn btn-delete" onClick={() => handleDelete(movie.id)}>Ẩn</button>
+                  ) : (
+                    <>
+                      <button className="btn action-btn" style={{backgroundColor: '#28a745', color: 'white'}} onClick={() => handleRestore(movie.id)}>Hiện</button>
+                      <button className="btn action-btn btn-delete" style={{backgroundColor: '#333'}} onClick={() => handleHardDelete(movie.id)}>Xóa</button>
+                    </>
                   )}
                 </td>
               </tr>
