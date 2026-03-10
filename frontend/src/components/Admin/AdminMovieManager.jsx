@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminMovieManager.css';
 
 function AdminMovieManager() {
@@ -8,6 +9,7 @@ function AdminMovieManager() {
   const [isEditing, setIsEditing] = useState(false);
   // State lưu ID của phim đang được chỉnh sửa
   const [currentId, setCurrentId] = useState(null);
+  const navigate = useNavigate();
   
   // State quản lý dữ liệu của form nhập liệu
   const [formData, setFormData] = useState({
@@ -42,7 +44,12 @@ function AdminMovieManager() {
   const fetchMovies = () => {
     fetch(API_URL, { headers: getAuthHeaders() })
       .then(res => {
-        if (!res.ok) throw new Error("Không thể tải danh sách phim (Check quyền Staff)");
+        if (res.status === 403 || res.status === 401) {
+           alert("Phiên đăng nhập hết hạn hoặc không có quyền!");
+           navigate('/login');
+           throw new Error("Unauthorized");
+        }
+        if (!res.ok) throw new Error("Lỗi tải dữ liệu");
         return res.json();
       })
       .then(data => setMovies(data))
@@ -164,9 +171,19 @@ function AdminMovieManager() {
     });
   };
 
+  // Hàm đăng xuất
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className="admin-container">
-      <h1 className="admin-title">Quản Lý Phim (Staff)</h1>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <h1 className="admin-title">Quản Lý Phim (Staff)</h1>
+        <button className="btn btn-secondary" onClick={handleLogout}>Đăng Xuất</button>
+      </div>
+      
 
       {/* FORM NHẬP LIỆU */}
       <form className="movie-form" onSubmit={handleSubmit}>
