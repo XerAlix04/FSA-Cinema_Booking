@@ -1,6 +1,7 @@
 package com.starview.cinemabooking.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class AuthController {
         user.setHoTen(request.getHoTen());
         user.setEmail(request.getEmail());
         user.setMatKhau(passwordEncoder.encode(request.getMatKhau()));
-        user.setVaiTro(request.getVaiTro() != null ? request.getVaiTro() : "CUSTOMER");
+        user.setVaiTro(request.getVaiTro() != null ? request.getVaiTro() : "STAFF");
         user.setSoDienThoai(request.getSoDienThoai());
 
         nguoiDungRepository.save(user);
@@ -77,5 +78,11 @@ public class AuthController {
         response.put("token", jwtToken);
         
         return ResponseEntity.ok(response);
+    }
+
+    // API lấy danh sách tất cả tài khoản để kiểm tra (GET /api/v1/auth/users)
+    @GetMapping("/users")
+    public ResponseEntity<List<NguoiDung>> getAllUsers() {
+        return ResponseEntity.ok(nguoiDungRepository.findAll());
     }
 }

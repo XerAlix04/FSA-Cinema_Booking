@@ -44,11 +44,11 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 		// Public endpoints
                         .requestMatchers("/auth/**").permitAll()
-                        // Lưu ý: context-path là /api/v1, nên đường dẫn ở đây là /phim
-                        .requestMatchers("/phim/**").permitAll()
                         // Staff endpoints require STAFF role
-                        // 2. Tạm thời cho phép tất cả để test, sau này sẽ đổi lại thành .hasRole("STAFF")
-                        .requestMatchers("/phim/staff/**").hasRole("STAFF")
+                        // Đưa quy tắc cụ thể lên trước: API staff bắt buộc phải có quyền STAFF
+                        .requestMatchers("/admin/**").hasRole("STAFF")
+                        // Đưa quy tắc tổng quát xuống dưới: Các API phim khác (public) thì cho phép tất cả
+                        .requestMatchers("/phim/**").permitAll()
                         // Other configuration as needed
                         .anyRequest().authenticated())
         		.addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);

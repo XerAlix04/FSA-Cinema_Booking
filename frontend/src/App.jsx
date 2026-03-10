@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Catalog from './components/Catalog/Catalog.jsx';
 import Navbar from './components/Navbar/Navbar.jsx';
 import AdminMovieManager from './components/Admin/AdminMovieManager';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register.jsx';
+import ProtectedRoute from './ProtectedRoute.jsx';
 import './App.css';
 
 function App() {
@@ -18,7 +21,17 @@ function App() {
           } />
 
           {/* Route cho nhân viên: Trang quản lý phim */}
-          <Route path="/admin" element={<AdminMovieManager />} />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminMovieManager />
+            </ProtectedRoute>
+          } />
+
+          {/* Route đăng nhập */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Route đăng ký */}
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>
