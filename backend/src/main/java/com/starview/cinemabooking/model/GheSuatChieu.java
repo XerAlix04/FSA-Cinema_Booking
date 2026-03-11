@@ -24,7 +24,7 @@ public class GheSuatChieu {
     
     // Relationship: DON_HANG ||--o{ GHE_SUAT_CHIEU 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "don_Hang_id", nullable = false)
+    @JoinColumn(name = "don_Hang_id")
     private DonHang donHang;
     
     // "Ví dụ: Thường, VIP, Đôi"
@@ -35,10 +35,11 @@ public class GheSuatChieu {
     @Column(name = "trang_thai", length = 50, nullable = false)
     private String trangThai;
     
-    @Column(name = "thoi_gian_het_han_giu_cho", nullable = false)
+    @Column(name = "thoi_gian_het_han_giu_cho")
     private LocalDateTime thoiGianHetHanGiuCho;
     
     //"Dùng cho Khóa lạc quan chống trùng ghế"
-    @Column(name = "is_locked")
-    private int isLocked;
+    @Version
+    @Column(name = "phien_ban")
+    private int phienBan;
 }
