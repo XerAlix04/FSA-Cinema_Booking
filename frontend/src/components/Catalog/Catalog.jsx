@@ -7,6 +7,7 @@ function Catalog() {
   const [loading, setLoading] = useState(true) // Thêm trạng thái loading
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     // Fetch active movies from Backend API
     // URL constructed from server.port=8080 and server.servlet.context-path=/api/v1
     fetch('http://localhost:8080/api/v1/phim')

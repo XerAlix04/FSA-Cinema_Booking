@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MovieCard.css';
 import TrailerModal from '../TrailerModal/TrailerModal'; // Import component vừa tạo
 
 
 function MovieCard({ movie }) {
    const [isTrailerVisible, setIsTrailerVisible] = useState(false);
+   const navigate = useNavigate();
 
   // Hàm để mở modal trailer
   const handlePlayTrailer = (e) => {
@@ -34,7 +36,11 @@ function MovieCard({ movie }) {
         <p><strong>Thời lượng:</strong> {movie.thoiLuongPhut} phút</p>
         <p><strong>Đánh giá:</strong> ⭐ {movie.danhGia}</p>
         <p className="price">{movie.giaGoc.toLocaleString('vi-VN')} VNĐ</p>
-        <button className="book-btn">Mua Vé</button>
+        
+        {/* Bắt sự kiện click để chuyển sang trang chi tiết/đặt vé */}
+        <button className="book-btn" onClick={() => navigate(`/phim/${movie.id}`)}>
+          Mua Vé
+        </button>
       </div>
     </div>
       {/* Render Modal nếu isTrailerVisible là true */}
