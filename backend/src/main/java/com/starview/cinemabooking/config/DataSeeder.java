@@ -40,6 +40,7 @@ public class DataSeeder {
                 phim1.setPosterUrl("https://image.tmdb.org/t/p/w500/8b8R8l88ILwM7t3zyZOG1TaROi3.jpg");
                 phim1.setTheLoai("Viễn tưởng, Hành động");
                 phim1.setDanhGia(8.8f);
+                phim1.setMoTa("Mô tả Placeholder");
                 phim1.setActive(true);
 
                 Phim phim2 = new Phim();
@@ -50,6 +51,7 @@ public class DataSeeder {
                 phim2.setPosterUrl("https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg");
                 phim2.setTheLoai("Hoạt hình, Hài hước");
                 phim2.setDanhGia(7.5f);
+                phim2.setMoTa("Mô tả Placeholder");
                 phim2.setActive(true);
 
                 Phim phim3 = new Phim();
@@ -60,6 +62,7 @@ public class DataSeeder {
                 phim3.setPosterUrl("https://image.tmdb.org/t/p/w500/tMefBSflR6PGQLvLuPEHZotffMv.jpg");
                 phim3.setTheLoai("Hành động, Phiêu lưu");
                 phim3.setDanhGia(6.9f);
+                phim3.setMoTa("Mô tả Placeholder");
                 phim3.setActive(true);
 
                 Phim phim4 = new Phim();
@@ -70,6 +73,7 @@ public class DataSeeder {
                 phim4.setPosterUrl("https://image.tmdb.org/t/p/w500/8Qxk238379X789V2F5f3c4gJYj.jpg");
                 phim4.setTheLoai("Hành động, Hình sự");
                 phim4.setDanhGia(6.9f);
+                phim4.setMoTa("Mô tả Placeholder");
                 phim4.setActive(true); 
                 
                 Phim phim5 = new Phim();
@@ -80,6 +84,7 @@ public class DataSeeder {
                 phim5.setPosterUrl("https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg");
                 phim5.setTheLoai("Lịch sử, Chính kịch");
                 phim5.setDanhGia(8.1f);
+                phim5.setMoTa("Mô tả Placeholder");
                 phim5.setActive(true); 
                 
                 Phim phim6 = new Phim();
@@ -90,6 +95,7 @@ public class DataSeeder {
                 phim6.setPosterUrl("https://image.tmdb.org/t/p/w500/pQYHouPsDf32FhIKYB72laNSMod.jpg");
                 phim6.setTheLoai("Hành động, Hình sự");
                 phim6.setDanhGia(7.6f);
+                phim6.setMoTa("Mô tả Placeholder");
                 phim6.setActive(true); 
                 
                 Phim phim7 = new Phim();
@@ -100,6 +106,7 @@ public class DataSeeder {
                 phim7.setPosterUrl("https://image.tmdb.org/t/p/w500/sh7Rg8Er3tFcN9BpKIPOMvALgZd.jpg");
                 phim7.setTheLoai("Hành động, Chiến tranh");
                 phim7.setDanhGia(7.4f);
+                phim7.setMoTa("Mô tả Placeholder");
                 phim7.setActive(true); 
                 
                 Phim phim8 = new Phim();
@@ -110,6 +117,7 @@ public class DataSeeder {
                 phim8.setPosterUrl("https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg");
                 phim8.setTheLoai("Hoạt hình, Gia đình");
                 phim8.setDanhGia(8.0f);
+                phim8.setMoTa("Mô tả Placeholder");
                 phim8.setActive(true); 
                 
                 Phim phim9 = new Phim();
@@ -120,6 +128,7 @@ public class DataSeeder {
                 phim9.setPosterUrl("https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg");
                 phim9.setTheLoai("Hidden");
                 phim9.setDanhGia(0.0f);
+                phim9.setMoTa("Mô tả Placeholder");
                 phim9.setActive(true); 
 
                 phimRepository.saveAll(Arrays.asList(phim1, phim2, phim3, phim4, phim5, phim6, phim7, phim8, phim9));
