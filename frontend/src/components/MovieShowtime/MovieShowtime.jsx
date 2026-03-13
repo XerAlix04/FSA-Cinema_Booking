@@ -138,7 +138,11 @@ function MovieShowtime() {
                       <span className="format-label">{show.format}</span>
                       <div className="time-slots">
                         {show.times.map((time, index) => (
-                          <button key={index} className="time-btn available" onClick={() => alert(`Bạn chọn suất: ${time}`)}>{time}</button>
+                          <button 
+                            key={index} 
+                            className="time-btn available" 
+                            onClick={() => navigate(`/phim/${id}/seatselection?cinema=${encodeURIComponent(cinema.name)}&time=${time}&date=${selectedDate}`)}
+                          >{time}</button>
                         ))}
                       </div>
                     </div>
