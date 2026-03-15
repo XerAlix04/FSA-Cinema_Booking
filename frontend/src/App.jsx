@@ -7,8 +7,7 @@ import MovieShowtime from './components/MovieShowtime/MovieShowtime.jsx';
 import Register from './components/Register/Register.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import SeatSelection from './components/SeatSelection/SeatSelection.jsx';
-// import Payment from './components/Payment/Payment.jsx';
-// import Ticket from './components/Ticket/Ticket.jsx';
+
 import './App.css';
 
 function App() {
@@ -37,17 +36,17 @@ function App() {
             </>
           } />
           {/* Route Thanh toán (Payment) */}
-          <Route path="/payment" element={
+          {/* <Route path="/payment" element={
             <>
               <Payment />
             </>
-          } />
+          } /> */}
           {/* Route Vé (Ticket QR Code) */}
-          <Route path="/ticket" element={
+          {/* <Route path="/ticket" element={
             <>
               <Ticket />
             </>
-          } />
+          } /> */}
 
 
           {/* Route cho nhân viên: Trang quản lý phim */}

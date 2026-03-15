@@ -12,6 +12,8 @@
   --seat-sold-top: #444444;
   --seat-selected-bg: var(--accent-color);
   --seat-selected-top: #ffcf40;
+  --seat-vip-bg: #c5a002; /* Màu vàng gold cho VIP */
+  --seat-vip-top: #fce282;
   --font-family: 'Poppins', 'Segoe UI', sans-serif;
   --card-bg: #1a1a1a;
   --border-color: #333;
@@ -205,7 +207,7 @@
 }
 
 .aisle-gap {
-  width: 40px;
+  width: 24px; /* Giảm khoảng cách lối đi */
 }
 
 /* -- NEW SEAT DESIGN -- */
@@ -245,6 +247,10 @@
 .seat.available .seat-top { fill: var(--seat-available-top); }
 .seat.available .seat-cushion { fill: var(--seat-available-bg); filter: brightness(0.85); }
 .seat.available .seat-arm { fill: var(--seat-available-bg); filter: brightness(1.15); }
+
+/* VIP Seat state */
+.seat.vip.available .seat-back { fill: var(--seat-vip-bg); }
+.seat.vip.available .seat-top { fill: var(--seat-vip-top); }
 
 .seat.selected .seat-back { fill: var(--seat-selected-bg); }
 .seat.selected .seat-top { fill: var(--seat-selected-top); }
@@ -294,6 +300,9 @@
   gap: 10px; 
 }
 /* Wrapper để style cho ghế trong legend mà không ảnh hưởng component Seat gốc */
+.legend-seat-wrapper .seat.vip .tooltip { display: none; }
+.legend-seat-wrapper .seat.thuong .tooltip { display: none; }
+
 .legend-seat-wrapper .seat {
   width: 24px;
   height: 24px;
@@ -373,7 +382,7 @@
 }
 .total-price span:first-child { color: #aaa; }
 .total-price span:last-child { font-size: 1.5rem; color: var(--accent-color); font-weight: 700;}
-
+ 
 .btn-proceed {
   width: 100%;
   padding: 15px;

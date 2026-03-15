@@ -1,14 +1,19 @@
 import React from 'react';
 
 // Sử dụng React.memo để ngăn việc render lại không cần thiết
-const Seat = React.memo(function Seat({ seatId, isSold, isSelected, onClick }) {
+const Seat = React.memo(function Seat({ seatId, loaiGhe, isSold, isSelected, onClick = () => {} }) {
   // Xác định các lớp CSS dựa trên props
-  const seatClasses = `seat ${isSold ? 'sold' : ''} ${isSelected ? 'selected' : 'available'}`;
+  const seatClasses = [
+    'seat',
+    loaiGhe === 'VIP' ? 'vip' : 'thuong',
+    isSold ? 'sold' : 'available',
+    isSelected ? 'selected' : ''
+  ].join(' ');
 
   // Hàm xử lý click, chỉ gọi lại hàm cha nếu ghế không phải là ghế đã bán
   const handleClick = () => {
     if (!isSold) {
-      onClick(seatId);
+      onClick(); // Để cha tự xử lý object seat đã bind
     }
   };
 
