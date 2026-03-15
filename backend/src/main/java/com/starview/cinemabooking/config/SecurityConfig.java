@@ -45,10 +45,9 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // Public endpoints
                         .requestMatchers("/auth/**").permitAll()
-                        // Đặt ghế/vé xem
                         .requestMatchers("/bookings/**").permitAll()
-                        // List suất chiếu theo phim và ngày
                         .requestMatchers("/suat-chieu/phim/**").permitAll()
+                        .requestMatchers("/error/**").permitAll()
                         // Staff endpoints require STAFF role
                         // Đưa quy tắc cụ thể lên trước: API staff bắt buộc phải có quyền STAFF
                         .requestMatchers("/phim/staff/**", "/phong-chieu/staff/**", "/suat-chieu/staff/**").hasRole("STAFF")
