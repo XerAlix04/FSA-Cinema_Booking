@@ -1,0 +1,149 @@
+/* Tái sử dụng CSS layout tương tự SeatSelection để đồng bộ trải nghiệm */
+.payment-container {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  min-height: 100vh;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  padding: 30px 10%;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInEffect 0.5s ease-out forwards;
+}
+
+.payment-container .back-nav {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  color: #ffb400; 
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease, color 0.2s ease;
+  background: rgba(0,0,0,0.4);
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+.payment-container .back-nav:hover {
+  transform: translateX(-5px);
+  color: #ff8c00;
+}
+
+.payment-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+/* --- CỘT TRÁI: FORM --- */
+.payment-form-section {
+  flex: 1;
+  background: #1a1a1a;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #333;
+}
+
+.payment-form-section h2 {
+  margin: 0 0 10px 0;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.payment-subtitle {
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+.payment-form .form-group {
+  margin-bottom: 20px;
+}
+
+.payment-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.payment-form input:focus {
+  outline: none;
+  border-color: #ffb400;
+}
+
+.payment-form .form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.payment-form .form-row .form-group {
+  flex: 1;
+}
+
+.btn-pay {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #ffb400, #ff8c00);
+  border: none;
+  border-radius: 8px;
+  color: black;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-pay:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 140, 0, 0.2);
+}
+
+.btn-pay:disabled {
+  background: #3a3a3a;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- CỘT PHẢI: SUMMARY --- */
+.payment-summary-section {
+  width: 350px;
+  flex-shrink: 0;
+}
+
+/* Tái sử dụng class từ SeatSelection, import trực tiếp vào DOM */
+@import '../SeatSelection/SeatSelection.css';
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+  .payment-content {
+    flex-direction: column-reverse;
+  }
+  .payment-summary-section {
+    width: 100%;
+  }
+}

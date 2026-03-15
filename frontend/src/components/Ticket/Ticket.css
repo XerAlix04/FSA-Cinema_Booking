@@ -1,0 +1,174 @@
+.ticket-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  padding: 40px 20px;
+}
+
+.ticket-page-container.error-state {
+  color: white;
+}
+
+/* Tấm vé bao ngoài */
+.ticket-wrapper {
+  display: flex;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(255, 180, 0, 0.15);
+  margin-bottom: 30px;
+  animation: dropIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-50px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Phần thông tin phim */
+.ticket-info-section {
+  flex: 2;
+  padding: 40px;
+  border-right: 2px dashed #ccc;
+  position: relative;
+  min-width: 0; /* Cho phép nội dung flex tự động thu nhỏ nếu màn hình hẹp */
+}
+
+/* Tạo hiệu ứng rãnh cắt của vé */
+.ticket-info-section::before,
+.ticket-info-section::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  background-color: #0f0f0f;
+  border-radius: 50%;
+}
+
+.ticket-info-section::before { top: -15px; }
+.ticket-info-section::after { bottom: -15px; }
+
+.ticket-header {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.ticket-header h3 {
+  color: #28a745;
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+}
+
+.booking-ref {
+  font-weight: 800;
+  color: #e32222;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.movie-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.detail-item {
+  font-size: 1.1rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+.detail-item span:first-child {
+  color: #777;
+  display: inline-block;
+  width: 140px;
+}
+
+.seats-highlight {
+  background-color: #ffb400;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Phần chứa QR Code */
+.ticket-qr-section {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  min-width: 260px; /* Đảm bảo khu vực QR không bao giờ bị ép nhỏ hơn kích thước này */
+  flex-shrink: 0; /* Cấm flexbox bóp nghẹt khu vực này */
+}
+
+.qr-image {
+  width: 180px;
+  height: 180px;
+  border: 10px solid #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  box-sizing: border-box; /* Tính toán lại kích thước để viền 10px nằm gọn bên trong */
+  object-fit: contain; /* Đảm bảo ảnh QR luôn hiển thị trọn vẹn */
+}
+
+.qr-instruction {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.btn-home {
+  padding: 15px 40px;
+  background-color: transparent;
+  color: #ffb400;
+  border: 2px solid #ffb400;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-home:hover {
+  background-color: #ffb400;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-wrapper {
+    flex-direction: column;
+  }
+  .ticket-info-section {
+    border-right: none;
+    border-bottom: 2px dashed #ccc;
+  }
+  .ticket-info-section::before,
+  .ticket-info-section::after {
+    right: auto;
+    left: -15px;
+    bottom: -15px;
+  }
+  .ticket-info-section::before { left: -15px; top: auto; bottom: -15px;}
+  .ticket-info-section::after { left: auto; right: -15px; bottom: -15px;}
+}
