@@ -1,6 +1,7 @@
 package com.starview.cinemabooking.config;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,10 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.starview.cinemabooking.model.Phim;
 import com.starview.cinemabooking.model.PhongChieu;
 import com.starview.cinemabooking.model.SuatChieu;
+import com.starview.cinemabooking.model.GheSuatChieu;
 import com.starview.cinemabooking.model.NguoiDung;
 import com.starview.cinemabooking.repository.PhimRepository;
 import com.starview.cinemabooking.repository.PhongChieuRepository;
 import com.starview.cinemabooking.repository.SuatChieuRepository;
+import com.starview.cinemabooking.repository.GheSuatChieuRepository;
 import com.starview.cinemabooking.repository.NguoiDungRepository;
 
 @Configuration
@@ -26,6 +29,7 @@ public class DataSeeder {
             NguoiDungRepository nguoiDungRepository,
             PhongChieuRepository phongChieuRepository,
             SuatChieuRepository suatChieuRepository,
+            GheSuatChieuRepository gheSuatChieuRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             // --- TẠO TÀI KHOẢN STAFF MẪU ---
@@ -48,7 +52,7 @@ public class DataSeeder {
                 phim1.setGiaGoc(120000.0f);
                 phim1.setThoiLuongPhut(16);
                 phim1.setTrailerUrl("https://www.youtube.com/watch?v=Way9Dexny3w");
-                phim1.setPosterUrl("https://image.tmdb.org/t/p/w500/8b8R8l88ILwM7t3zyZOG1TaROi3.jpg");
+                phim1.setPosterUrl("https://image.tmdb.org/t/p/w500/8QdnKQyZDlN6rBSrfU1V5PctfUu.jpg");
                 phim1.setTheLoai("Viễn tưởng, Hành động");
                 phim1.setDanhGia(8.8f);
                 phim1.setMoTa("Mô tả Placeholder");
@@ -70,7 +74,7 @@ public class DataSeeder {
                 phim3.setGiaGoc(110000.0f);
                 phim3.setThoiLuongPhut(115);
                 phim3.setTrailerUrl("https://www.youtube.com/watch?v=qqrpMRDuPfc");
-                phim3.setPosterUrl("https://image.tmdb.org/t/p/w500/tMefBSflR6PGQLvLuPEHZotffMv.jpg");
+                phim3.setPosterUrl("https://image.tmdb.org/t/p/w500/lTpnAtn1hWXDLxEmkD28l6UyPlF.jpg");
                 phim3.setTheLoai("Hành động, Phiêu lưu");
                 phim3.setDanhGia(6.9f);
                 phim3.setMoTa("Mô tả Placeholder");
@@ -81,7 +85,7 @@ public class DataSeeder {
                 phim4.setGiaGoc(120000.0f);
                 phim4.setThoiLuongPhut(176);
                 phim4.setTrailerUrl("https://www.youtube.com/watch?v=mqqft2x_Aa4");
-                phim4.setPosterUrl("https://image.tmdb.org/t/p/w500/8Qxk238379X789V2F5f3c4gJYj.jpg");
+                phim4.setPosterUrl("https://image.tmdb.org/t/p/w500/nMp4tu8XuVG3CSWdXTFiHLdngnc.jpg");
                 phim4.setTheLoai("Hành động, Hình sự");
                 phim4.setDanhGia(6.9f);
                 phim4.setMoTa("Mô tả Placeholder");
@@ -103,7 +107,7 @@ public class DataSeeder {
                 phim6.setGiaGoc(11000.0f);
                 phim6.setThoiLuongPhut(134);
                 phim6.setTrailerUrl("https://www.youtube.com/watch?v=7LH-TIcPqks");
-                phim6.setPosterUrl("https://image.tmdb.org/t/p/w500/pQYHouPsDf32FhIKYB72laNSMod.jpg");
+                phim6.setPosterUrl("https://image.tmdb.org/t/p/w500/enAODUiL6eMpKaYPH2BEStVafQ2.jpg");
                 phim6.setTheLoai("Hành động, Hình sự");
                 phim6.setDanhGia(7.6f);
                 phim6.setMoTa("Mô tả Placeholder");
@@ -191,10 +195,36 @@ public class DataSeeder {
                     sc3.setThoiGianChieu(now.withHour(19).withMinute(15).withSecond(0)); // Hôm nay 19:15
                     sc3.setHeSoGia(1.0f);
                     
-                    suatChieuRepository.saveAll(Arrays.asList(sc1, sc2, sc3));
+                    List<SuatChieu> savedShowtimes = suatChieuRepository.saveAll(Arrays.asList(sc1, sc2, sc3));
                     System.out.println("✅ Mock showtime data successfully seeded!");
+                    
+                    List<GheSuatChieu> allSeats = new ArrayList<>();
+                    
+                    for (SuatChieu showtime : savedShowtimes) {
+                        int totalSeats = showtime.getPhongChieu().getTongSoGhe();
+                        
+                        for (int i = 1; i <= totalSeats; i++) {
+                            GheSuatChieu ghe = new GheSuatChieu();
+                            ghe.setSuatChieu(showtime);
+                            ghe.setDonHang(null);
+                            ghe.setLoaiGhe(determineSeatType(i, totalSeats));
+                            ghe.setTrangThai("TRONG");
+                            ghe.setThoiGianHetHanGiuCho(showtime.getThoiGianChieu());
+                            ghe.setIsLocked(0); // Đổi sang ghe.setPhienBan(1) khi merge PR #54
+                            allSeats.add(ghe);
+                        }
+                    }
+                    
+                    gheSuatChieuRepository.saveAll(allSeats);
+                    System.out.println("✅ Mock seats successfully generated for all showtimes!");
                 }
             }
         };
+    }
+    
+    private String determineSeatType(int index, int totalSeats) {
+        int vipSeatCount = (int) Math.ceil(totalSeats * 0.2);
+        int vipStartIndex = totalSeats - vipSeatCount + 1;
+        return index >= vipStartIndex ? "VIP" : "THUONG";
     }
 }
