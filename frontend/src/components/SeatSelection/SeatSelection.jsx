@@ -23,6 +23,7 @@ function SeatSelection() {
   const [movie, setMovie] = useState(null); // State for movie details
   const [seats, setSeats] = useState([]); // State lưu danh sách ghế 1 chiều từ API
   const [isSeatsLoading, setIsSeatsLoading] = useState(true);
+  const [isLocking, setIsLocking] = useState(false); // Trạng thái đang gọi API khóa ghế
   // State lưu các object ghế đang được chọn
   const [selectedSeats, setSelectedSeats] = useState([]); 
 
@@ -93,6 +94,44 @@ function SeatSelection() {
     });
     return rows;
   }, [seats]);
+
+  const handleProceedToPayment = async () => {
+    setIsLocking(true);
+    const seatIds = selectedSeats.map(s => s.id);
+
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/bookings/hold', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ seatIds: seatIds })
+      });
+
+      if (response.ok) {
+        // Nếu khóa ghế thành công trên DB, chuyển sang trang Payment
+        navigate('/payment', {
+          state: {
+            movie,
+            cinemaName,
+            formattedDate,
+            showtime,
+            selectedSeats: selectedSeats.map(s => s.seatLabel), // Chuyển sang mảng chuỗi để Payment.jsx dễ xử lý
+            totalPrice,
+          }
+        });
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Một trong những ghế bạn chọn vừa được người khác đặt. Vui lòng chọn ghế khác!");
+        window.location.reload(); // Reload để cập nhật trạng thái ghế mới nhất
+      }
+    } catch (error) {
+      console.error("Lỗi khi khóa ghế:", error);
+      alert("Không thể kết nối tới hệ thống đặt vé. Vui lòng thử lại sau.");
+    } finally {
+      setIsLocking(false);
+    }
+  };
 
   const handleSeatClick = (seatObject) => {
     // Không cho click ghế đã bán
@@ -243,19 +282,10 @@ function SeatSelection() {
             
             <button 
               className="btn-proceed" 
-              disabled={selectedSeats.length === 0}
-              onClick={() => navigate('/payment', {
-                state: {
-                  movie,
-                  cinemaName,
-                  formattedDate,
-                  showtime,
-                  selectedSeats,
-                  totalPrice,
-                }
-              })}
+              disabled={selectedSeats.length === 0 || isLocking}
+              onClick={handleProceedToPayment}
             >
-              Proceed to Payment
+              {isLocking ? 'Processing...' : 'Proceed to Payment'}
             </button>
           </div>
         </div>
