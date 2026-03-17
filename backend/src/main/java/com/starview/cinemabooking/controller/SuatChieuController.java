@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.starview.cinemabooking.dtos.BatchUpdateHeSoGiaRequest;
+import com.starview.cinemabooking.dtos.BatchUpdateHeSoGiaResponse;
 import com.starview.cinemabooking.dtos.CreateSuatChieuRequest;
 import com.starview.cinemabooking.dtos.MovieShowtimesByDateResponse;
 import com.starview.cinemabooking.dtos.GheSuatChieuDTO;
@@ -64,6 +67,24 @@ public class SuatChieuController {
     public ResponseEntity<SuatChieuDTO> getSuatChieuById(@PathVariable Integer id) {
     	SuatChieuDTO suatChieuDTO = suatChieuService.getSuatChieuById(id);
         return ResponseEntity.ok(suatChieuDTO);
-        
+    }
+    
+    @PutMapping("staff/he-so-gia")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> applyDynamicPricing(@RequestBody BatchUpdateHeSoGiaRequest request){
+    	try {
+    		suatChieuService.batchUpdateHeSoGia(request.getSuatChieuIds(), request.getHeSoGia());
+    		
+    		BatchUpdateHeSoGiaResponse response = BatchUpdateHeSoGiaResponse.builder()
+    				.message("Cập nhật hệ số giá thành công")
+    				.soLuongCapNhat(request.getSuatChieuIds().size())
+    				.heSoGiaMoi(request.getHeSoGia())
+    				.suatChieuIds(request.getSuatChieuIds())
+    				.build();
+    		
+    		return ResponseEntity.ok(response);
+    	} catch (IllegalArgumentException e) {
+    		return ResponseEntity.badRequest().body(e.getMessage());
+    	}
     }
 }
