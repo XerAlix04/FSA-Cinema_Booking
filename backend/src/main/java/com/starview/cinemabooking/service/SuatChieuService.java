@@ -189,4 +189,23 @@ public class SuatChieuService {
     	// Bây giờ Mapper có thể thoải mái lấy dữ liệu Phim và PhongChieu!
     	return SuatChieuMapper.toDTO(suatChieu);
     }
+    
+    @Transactional
+    public void batchUpdateHeSoGia(List<Integer> suatChieuIds, Float newHeSoGia) {
+    	if (newHeSoGia == null || newHeSoGia <= 0) {
+    		throw new IllegalArgumentException("Hệ số giá không hợp lệ. Phải lớn hơn 0");
+    	}
+    	
+    	List<SuatChieu> suatChieus = suatChieuRepository.findAllById(suatChieuIds);
+    	
+    	if (suatChieus.isEmpty()) {
+    		throw new IllegalArgumentException("Không tìm thấy suất chiếu nào để cập nhật");
+    	}
+    	
+    	for (SuatChieu sc : suatChieus) {
+    		sc.setHeSoGia(newHeSoGia);
+    	}
+    	
+    	suatChieuRepository.saveAll(suatChieus);
+    }
 }

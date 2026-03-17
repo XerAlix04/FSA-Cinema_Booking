@@ -44,7 +44,9 @@ public class SecurityConfig {
                         // Testing, temporary)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // Public endpoints
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/login/**").permitAll()
+                        .requestMatchers("/auth/users/**").permitAll()
+                        .requestMatchers("/auth/register/**").hasRole("ADMIN")
                         .requestMatchers("/bookings/**").permitAll()
                         .requestMatchers("/suat-chieu/**").permitAll()
                         .requestMatchers("/suat-chieu/*/ghe").permitAll() // Cho phép lấy danh sách ghế của suất chiếu
@@ -52,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/error/**").permitAll()
                         // Staff endpoints require STAFF role
                         // Đưa quy tắc cụ thể lên trước: API staff bắt buộc phải có quyền STAFF
-                        .requestMatchers("/phim/staff/**", "/phong-chieu/staff/**", "/suat-chieu/staff/**").hasRole("STAFF")
+                        .requestMatchers("/phim/staff/**", "/phong-chieu/staff/**", "/suat-chieu/staff/**").hasAnyRole("STAFF", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("STAFF")
                         // Đưa quy tắc tổng quát xuống dưới: Các API phim khác (public) thì cho phép tất
                         // cả

@@ -48,7 +48,14 @@ public class DataSeeder {
                 staffUser.setEmail("staff@starview.com");
                 staffUser.setMatKhau(passwordEncoder.encode("123456"));
                 staffUser.setVaiTro("STAFF");
-                nguoiDungRepository.save(staffUser);
+                
+                NguoiDung adminUser = new NguoiDung();
+                adminUser.setHoTen("Admin Account");
+                adminUser.setEmail("admin@starview.com");
+                adminUser.setMatKhau(passwordEncoder.encode("123456"));
+                adminUser.setVaiTro("ADMIN");
+                nguoiDungRepository.saveAll(Arrays.asList(adminUser, staffUser));
+                System.out.println("✅ Admin account created: admin@starview.com / 123456");
                 System.out.println("✅ Staff account created: staff@starview.com / 123456");
             }
 
