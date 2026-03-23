@@ -3,6 +3,8 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import './SeatSelection.css';
 import Seat from './Seat'; // Import component Seat mới
 
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8080';
+
 function SeatSelection() {
   const { id } = useParams(); // Get movie ID from URL
   const [searchParams] = useSearchParams(); // Get query params
@@ -32,7 +34,7 @@ function SeatSelection() {
   // Fetch movie details when component mounts
   useEffect(() => {
     // This is the same fetch as in MovieShowtime
-    fetch(`http://localhost:8080/api/v1/phim/${id}`)
+    fetch(`${baseUrl}/api/v1/phim/${id}`)
       .then(res => {
         if (!res.ok) throw new Error("Không tìm thấy phim");
         return res.json();
@@ -63,7 +65,7 @@ function SeatSelection() {
   useEffect(() => {
     if (!suatChieuId || suatChieuId === 'undefined') return;
 
-    fetch(`http://localhost:8080/api/v1/suat-chieu/${suatChieuId}`)
+    fetch(`${baseUrl}/api/v1/suat-chieu/${suatChieuId}`)
       .then(res => {
         if (!res.ok) throw new Error("Không tìm thấy suất chiếu");
         return res.json();
@@ -80,7 +82,7 @@ function SeatSelection() {
       return;
     }
     setIsSeatsLoading(true); // Set loading true while fetching
-    const url = `http://localhost:8080/api/v1/suat-chieu/${suatChieuId}/ghe`;
+    const url = `${baseUrl}/api/v1/suat-chieu/${suatChieuId}/ghe`;
     console.log(" Đang gọi API lấy ghế tại:", url);
     fetch(url)
       .then(res => {
@@ -198,7 +200,7 @@ function SeatSelection() {
 
     const currentSessionId = sessionIdRef.current;
     const isCurrentlySelected = selectedSeats.some(s => s.id === seatObject.id);
-    const url = isCurrentlySelected ? 'http://localhost:8080/api/v1/bookings/release' : 'http://localhost:8080/api/v1/bookings/hold';
+    const url = isCurrentlySelected ? `${baseUrl}/api/v1/bookings/release` : `${baseUrl}/api/v1/bookings/hold`;
 
     try {
       const response = await fetch(url, {
