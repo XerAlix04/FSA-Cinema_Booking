@@ -15,7 +15,7 @@ function Payment() {
     formattedDate, 
     showtime, 
     selectedSeats, // render UI
-    selectedSeatsIds, // gửi cho backend
+    selectedSeatIds, // gửi cho backend
     totalPrice,
     sessionId, // Nhận sessionId từ SeatSelection
     currentCountdown, // Nhận countdown từ SeatSelection
@@ -39,18 +39,41 @@ function Payment() {
 
   // useEffect để quản lý bộ đếm ngược trên trang Payment
   useEffect(() => {
+    const handleTimeout = async () => {
+      alert("Thời gian giữ ghế đã hết. Vui lòng chọn lại ghế.");
+      
+      // Xóa các ghế đã chọn và countdown khỏi sessionStorage khi hết giờ
+      sessionStorage.removeItem('STARVIEW_CART');
+      sessionStorage.removeItem('STARVIEW_COUNTDOWN');
+
+      // Ép backend nhả toàn bộ ghế dựa vào danh sách ID ghế đã lưu ở bước trước
+      if (selectedSeatIds && selectedSeatIds.length > 0 && sessionId) {
+        const releasePromises = selectedSeatIds.map(seatId =>
+          fetch('http://localhost:8080/api/v1/bookings/release', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seatId: seatId, sessionId: sessionId }),
+          })
+        );
+        try {
+          await Promise.allSettled(releasePromises);
+          console.log("Đã yêu cầu backend nhả ghế do hết giờ ở màn hình thanh toán.");
+        } catch (e) {
+          console.error("Lỗi khi nhả ghế từ backend:", e);
+        }
+      }
+
+      // Điều hướng về trang chọn ghế, đảm bảo truyền đủ params
+      navigate(`/phim/${movie.id}/seatselection?cinema=${cinemaName}&time=${showtime}&date=${showdate}&suatChieuId=${suatChieuId}`);
+    };
+
     if (paymentCountdown > 0 && paymentCountdownIntervalRef.current === null) {
       paymentCountdownIntervalRef.current = setInterval(() => {
         setPaymentCountdown(prev => {
           if (prev <= 1) {
             clearInterval(paymentCountdownIntervalRef.current);
             paymentCountdownIntervalRef.current = null;
-            alert("Thời gian giữ ghế đã hết. Vui lòng chọn lại ghế.");
-            // Xóa các ghế đã chọn và countdown khỏi sessionStorage khi hết giờ
-            sessionStorage.removeItem('STARVIEW_CART');
-            sessionStorage.removeItem('STARVIEW_COUNTDOWN');
-            // Điều hướng về trang chọn ghế, đảm bảo truyền đủ params
-            navigate(`/phim/${movie.id}/seatselection?cinema=${cinemaName}&time=${showtime}&date=${showdate}&suatChieuId=${suatChieuId}`);
+            handleTimeout();
             return 0;
           }
           return prev - 1;
@@ -64,7 +87,7 @@ function Payment() {
         paymentCountdownIntervalRef.current = null;
       }
     };
-  }, [paymentCountdown, navigate, movie, cinemaName, showtime, showdate, suatChieuId]); // Dependencies cho việc khởi tạo và điều hướng
+  }, [paymentCountdown, navigate, movie, cinemaName, showtime, showdate, suatChieuId, selectedSeatIds, sessionId]); // Dependencies cho việc khởi tạo và điều hướng
 
   // Nếu người dùng vào thẳng link /payment mà không qua chọn ghế -> back về trang chủ
   if (!movie || !selectedSeats) {
