@@ -75,7 +75,23 @@ function Payment() {
           if (prev <= 1) {
             clearInterval(paymentCountdownIntervalRef.current);
             paymentCountdownIntervalRef.current = null;
-            handleTimeout();
+            // THE FIX: Ép Backend nhả ghế ngay lập tức giống trang SeatSelection
+            if (location.state?.selectedSeatIds) {
+              location.state.selectedSeatIds.forEach(async (seatId) => {
+                try {
+                  await fetch(`${baseUrl}/api/v1/bookings/release`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seatId: seatId, sessionId: sessionId })
+                  });
+                } catch (e) { console.error(e); }
+              });
+            }
+
+            alert("Thời gian giữ ghế đã hết. Vui lòng chọn lại ghế.");
+            sessionStorage.removeItem('STARVIEW_CART');
+            sessionStorage.removeItem('STARVIEW_COUNTDOWN');
+            navigate(`/phim/${movie.id}/seatselection?cinema=${cinemaName}&time=${showtime}&date=${showdate}&suatChieuId=${suatChieuId}`);
             return 0;
           }
           return prev - 1;
@@ -130,6 +146,14 @@ function Payment() {
       }
 
       const data = await response.json(); // data từ Spring Boot trả về sẽ có dạng: { bookingRef: "DH5", totalPrice: 140000, message: "..." }
+
+      // THE FIX: Dừng bộ đếm thời gian và dọn dẹp giỏ hàng khi thanh toán thành công!
+      if (paymentCountdownIntervalRef.current) {
+        clearInterval(paymentCountdownIntervalRef.current);
+        paymentCountdownIntervalRef.current = null;
+      }
+      sessionStorage.removeItem('STARVIEW_CART');
+      sessionStorage.removeItem('STARVIEW_COUNTDOWN');
 
       // 4. CHUẨN BỊ DỮ LIỆU QR
       const qrData = `REF:${data.bookingRef}|MOVIE:${movie.tenPhim}|SEATS:${selectedSeats.join(',')}`;
