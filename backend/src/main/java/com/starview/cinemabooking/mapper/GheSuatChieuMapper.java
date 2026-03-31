@@ -11,7 +11,14 @@ public class GheSuatChieuMapper {
 		
 		GheSuatChieuDTO dto = new GheSuatChieuDTO();
         dto.setId(gheSuatChieu.getId());
-        dto.setLoaiGhe(gheSuatChieu.getLoaiGhe());
+        
+        // THE FIX: Reach into GhePhongChieu to get the permanent data
+        if (gheSuatChieu.getGhePhongChieu() != null) {
+            dto.setLoaiGhe(gheSuatChieu.getGhePhongChieu().getLoaiGhe());
+            dto.setHangNgang(gheSuatChieu.getGhePhongChieu().getHangNgang());
+            dto.setCotDoc(gheSuatChieu.getGhePhongChieu().getCotDoc());
+        }
+        
         dto.setTrangThai(gheSuatChieu.getTrangThai());
         dto.setGiaTien(gheSuatChieu.calculatePrice());
         dto.setPhienGiaoDich(gheSuatChieu.getPhienGiaoDich());

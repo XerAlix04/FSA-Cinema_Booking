@@ -25,4 +25,8 @@ public class PhongChieu {
 	// Relationship: PHONG_CHIEU ||--o{ SUAT_CHIEU : "chứa"
 	@OneToMany(mappedBy = "phongChieu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SuatChieu> suatChieus;
+	
+	// Relationship: PHONG_CHIEU ||--o{ GHE_PHONG_CHIEU : "Bản đồ ghế vật lý"
+    @OneToMany(mappedBy = "phongChieu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GhePhongChieu> ghePhongChieus;
 }

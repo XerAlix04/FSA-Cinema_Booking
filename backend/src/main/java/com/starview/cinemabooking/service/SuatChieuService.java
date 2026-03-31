@@ -20,6 +20,7 @@ import com.starview.cinemabooking.dtos.SuatChieuCreateResponse;
 import com.starview.cinemabooking.dtos.SuatChieuDTO;
 import com.starview.cinemabooking.mapper.GheSuatChieuMapper;
 import com.starview.cinemabooking.mapper.SuatChieuMapper;
+import com.starview.cinemabooking.model.GhePhongChieu;
 import com.starview.cinemabooking.model.GheSuatChieu;
 import com.starview.cinemabooking.model.Phim;
 import com.starview.cinemabooking.model.PhongChieu;
@@ -72,15 +73,16 @@ public class SuatChieuService {
         suatChieu.setHeSoGia(request.getHeSoGia());
 
         SuatChieu savedSuatChieu = suatChieuRepository.save(suatChieu);
-
-        int totalSeats = phongChieu.getTongSoGhe();
-        List<GheSuatChieu> gheSuatChieus = new ArrayList<>(totalSeats);
-
-        for (int i = 1; i <= totalSeats; i++) {
+        
+        // THE FIX: Stop faking seats. Use the actual physical room layout!
+        List<GheSuatChieu> gheSuatChieus = new ArrayList<>();
+        
+        // Loop through the permanent physical seats attached to this room
+        for (GhePhongChieu physicalSeat : phongChieu.getGhePhongChieus()) {
             GheSuatChieu ghe = new GheSuatChieu();
             ghe.setSuatChieu(savedSuatChieu);
             ghe.setDonHang(null);
-            ghe.setLoaiGhe(determineSeatType(i));
+            ghe.setGhePhongChieu(physicalSeat); // Connect tracker to the physical chair
             ghe.setTrangThai(SEAT_STATUS_TRONG);
             ghe.setThoiGianHetHanGiuCho(start);
             ghe.setPhienBan(1);
@@ -94,7 +96,7 @@ public class SuatChieuService {
                 phim.getId(),
                 phongChieu.getId(),
                 savedSuatChieu.getThoiGianChieu(),
-                totalSeats);
+                phongChieu.getTongSoGhe());
     }
 
     public MovieShowtimesByDateResponse getMovieShowtimesByDate(Integer phimId, LocalDate date) {
@@ -165,11 +167,6 @@ public class SuatChieuService {
                         "Showtime overlaps existing showtime in the same room");
             }
         }
-    }
-
-    private String determineSeatType(int index) {
-       
-     return index <= 30 ? "THUONG" : "VIP";
     }
 
     private String resolveAvailabilityStatus(Integer totalSeats, long availableSeats) {

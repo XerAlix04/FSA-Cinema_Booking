@@ -22,14 +22,20 @@ public class GheSuatChieu {
     @JoinColumn(name = "suat_chieu_id", nullable = false)
     private SuatChieu suatChieu;
 
+    // Relationship: GHE_PHONG_CHIEU ||--o{ GHE_SUAT_CHIEU
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ghe_phong_chieu_id", nullable = false)
+    private GhePhongChieu ghePhongChieu;
+    
     // Relationship: DON_HANG ||--o{ GHE_SUAT_CHIEU
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "don_Hang_id", nullable = true)
     private DonHang donHang;
 
     // "Ví dụ: Thường, VIP, Đôi"
-    @Column(name = "loai_ghe", length = 50, nullable = false)
-    private String loaiGhe;
+    // Now in GhePhongChieu
+//    @Column(name = "loai_ghe", length = 50, nullable = false)
+//    private String loaiGhe;
 
     // "Trống, Đang chờ, Đã bán"
     @Column(name = "trang_thai", length = 50, nullable = false)
@@ -46,9 +52,15 @@ public class GheSuatChieu {
 	    // Lấy giá gốc của phim nhân với hệ số giá của suất chiếu
 	    float basePrice = this.suatChieu.getPhim().getGiaGoc() * this.suatChieu.getHeSoGia();
 	    
+	    // Lấy loại ghế từ ghế vật lý
+        String physicalSeatType = this.ghePhongChieu.getLoaiGhe();
+	    
 	    // Cộng phụ thu nếu là ghế VIP
-	    if ("VIP".equalsIgnoreCase(this.loaiGhe)) {
+	    if ("VIP".equalsIgnoreCase(physicalSeatType)) {
 	        return basePrice + 30000f; 
+	    }
+	    else if ("SWEETBOX".equalsIgnoreCase(physicalSeatType)) {
+	    	return basePrice * 2;
 	    }
 	    
 	    return basePrice;

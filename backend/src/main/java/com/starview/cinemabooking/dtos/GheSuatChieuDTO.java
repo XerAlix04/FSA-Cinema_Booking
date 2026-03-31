@@ -14,6 +14,10 @@ public class GheSuatChieuDTO {
 	
 	private Integer suatChieuId;
 	
+	// NEW: The physical coordinates for the React CSS Grid
+    private String hangNgang; 
+    private Integer cotDoc;
+	
 	private String loaiGhe;
 	
 	private String trangThai;

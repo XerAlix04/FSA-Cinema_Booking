@@ -13,12 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.starview.cinemabooking.model.Phim;
 import com.starview.cinemabooking.model.PhongChieu;
 import com.starview.cinemabooking.model.SuatChieu;
+import com.starview.cinemabooking.model.GhePhongChieu;
 import com.starview.cinemabooking.model.GheSuatChieu;
 import com.starview.cinemabooking.model.KhuyenMai;
 import com.starview.cinemabooking.model.NguoiDung;
 import com.starview.cinemabooking.repository.PhimRepository;
 import com.starview.cinemabooking.repository.PhongChieuRepository;
 import com.starview.cinemabooking.repository.SuatChieuRepository;
+import com.starview.cinemabooking.repository.GhePhongChieuRepository;
 import com.starview.cinemabooking.repository.GheSuatChieuRepository;
 import com.starview.cinemabooking.repository.KhuyenMaiRepository;
 import com.starview.cinemabooking.repository.NguoiDungRepository;
@@ -32,6 +34,7 @@ public class DataSeeder {
             PhongChieuRepository phongChieuRepository,
             SuatChieuRepository suatChieuRepository,
             GheSuatChieuRepository gheSuatChieuRepository,
+            GhePhongChieuRepository ghePhongChieuRepository,
             KhuyenMaiRepository khuyenMaiRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
@@ -39,6 +42,7 @@ public class DataSeeder {
             // Lưu ý: Phải xóa theo thứ tự từ bảng con đến bảng cha để tránh lỗi khóa ngoại
             System.out.println("🔄 Đang thực hiện reset toàn bộ dữ liệu...");
             gheSuatChieuRepository.deleteAll();
+            ghePhongChieuRepository.deleteAll();
             suatChieuRepository.deleteAll();
             phongChieuRepository.deleteAll();
             phimRepository.deleteAll();
@@ -171,20 +175,35 @@ public class DataSeeder {
 
             // --- TẠO PHÒNG CHIẾU MẪU ---
             if (phongChieuRepository.count() == 0) {
+            	// Lưu phòng chiếu trước
                 PhongChieu room1 = new PhongChieu();
                 room1.setTenPhong("Phòng 1");
-                room1.setTongSoGhe(100);
-
+                room1.setTongSoGhe(100); // Sẽ được map thành 10 hàng x 10 cột
+                room1 = phongChieuRepository.save(room1);
+                
                 PhongChieu room2 = new PhongChieu();
                 room2.setTenPhong("Phòng 2");
-                room2.setTongSoGhe(80);
+                room2.setTongSoGhe(100); // Sẽ được map thành 10 hàng x 10 cột
+                room2 = phongChieuRepository.save(room2);
 
                 PhongChieu room3 = new PhongChieu();
                 room3.setTenPhong("Phòng VIP");
-                room3.setTongSoGhe(50);
+                room3.setTongSoGhe(50); // Sẽ được map thành 5 hàng x 10 cột
+                room3 = phongChieuRepository.save(room3);
 
-                phongChieuRepository.saveAll(Arrays.asList(room1, room2, room3));
-                System.out.println("✅ Mock room data successfully seeded!");
+                // TẠO LƯỚI GHẾ VẬT LÝ (Tọa độ thật cho Frontend)
+                List<GhePhongChieu> physicalSeats = new ArrayList<>();
+                
+                // Room 1: 10 Rows (A-J), 10 Columns (1-10)
+                physicalSeats.addAll(generatePhysicalSeats(room1, 10, 10));
+                
+                // Room VIP: 5 Rows (A-E), 10 Columns (1-10)
+                physicalSeats.addAll(generatePhysicalSeats(room2, 10, 10));
+                
+                physicalSeats.addAll(generatePhysicalSeats(room3, 5, 10));
+
+                ghePhongChieuRepository.saveAll(physicalSeats);
+                System.out.println("✅ Mock room and PHYSICAL SEAT layouts successfully seeded!");
             }
 
             // --- TẠO MÃ GIẢM GIÁ MẪU ---
@@ -213,7 +232,7 @@ public class DataSeeder {
                 System.out.println("✅ Mock voucher data successfully seeded!");
             }
 
-            // --- TẠO SUẤT CHIẾU MẪU ---
+            // --- TẠO SUẤT CHIẾU MẪU VÀ GHẾ SUẤT CHIẾU ---
             if (suatChieuRepository.count() == 0) {
                 List<Phim> phims = phimRepository.findAll();
                 List<PhongChieu> phongs = phongChieuRepository.findAll();
@@ -245,11 +264,15 @@ public class DataSeeder {
 
                     List<GheSuatChieu> allSeats = new ArrayList<>();
                     for (SuatChieu showtime : savedShowtimes) {
-                        int totalSeats = showtime.getPhongChieu().getTongSoGhe();
-                        for (int i = 1; i <= totalSeats; i++) {
+                    	// Lấy toàn bộ ghế vật lý của phòng này
+                        List<GhePhongChieu> physicalSeatsInRoom = ghePhongChieuRepository.findAll().stream()
+                                .filter(gpc -> gpc.getPhongChieu().getId().equals(showtime.getPhongChieu().getId()))
+                                .toList();
+                        
+                        for (GhePhongChieu physicalSeat : physicalSeatsInRoom) {
                             GheSuatChieu ghe = new GheSuatChieu();
                             ghe.setSuatChieu(showtime);
-                            ghe.setLoaiGhe(determineSeatType(i));
+                            ghe.setGhePhongChieu(physicalSeat); // Link GhePhongChieu & GheSuatChieu
                             ghe.setTrangThai("TRONG");
                             ghe.setThoiGianHetHanGiuCho(showtime.getThoiGianChieu());
                             ghe.setPhienBan(1); // Đổi sang ghe.setPhienBan(1) khi merge PR #54
@@ -266,5 +289,38 @@ public class DataSeeder {
     private String determineSeatType(int index) {
         return index <= 30 ? "THUONG" : "VIP";
 
+    }
+    
+    // --- HELPER METHOD: Sinh ra tọa độ ghế vật lý ---
+    private List<GhePhongChieu> generatePhysicalSeats(PhongChieu room, int rows, int cols) {
+        List<GhePhongChieu> list = new ArrayList<>();
+        
+        for (int r = 0; r < rows; r++) {
+            // Convert 0, 1, 2... to A, B, C...
+            String rowLetter = String.valueOf((char) ('A' + r)); 
+            
+            for (int c = 1; c <= cols; c++) {
+                // Tạo một lối đi (Aisle) ở giữa rạp bằng cách bỏ qua cột 5 và 6
+                // Frontend sẽ nhận ra tọa độ bị mất và tự vẽ khoảng trống
+                if (c == 5 || c == 6) continue; 
+
+                GhePhongChieu physicalSeat = new GhePhongChieu();
+                physicalSeat.setPhongChieu(room);
+                physicalSeat.setHangNgang(rowLetter);
+                physicalSeat.setCotDoc(c);
+
+                // Logic loại ghế chuẩn quốc tế
+                if (r >= rows - 1) {
+                    physicalSeat.setLoaiGhe("SWEETBOX"); // Hàng cuối cùng luôn là Sweetbox đôi
+                } else if (r >= rows / 2) {
+                    physicalSeat.setLoaiGhe("VIP"); // Nửa sau rạp là ghế VIP
+                } else {
+                    physicalSeat.setLoaiGhe("STANDARD"); // Nửa trước màn hình là ghế thường
+                }
+                
+                list.add(physicalSeat);
+            }
+        }
+        return list;
     }
 }
