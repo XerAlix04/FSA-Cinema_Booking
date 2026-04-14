@@ -1,0 +1,4 @@
+"id","diem_tich_luy","email","ho_ten","mat_khau","ngay_sinh","phien_ban","so_dien_thoai","vai_tro"
+"1","0","admin@starview.com","Admin Account","$2a$10$B/.cgFH9p9SFkXpBOgDdB.7IaoAh7sAfdYogBwOqhaq7KxEYrdkW.",NULL,"0",NULL,"ADMIN"
+"2","0","staff@starview.com","Staff Account","$2a$10$DCum5SluJlG0CX.HPfd8d.8UsyUKcTJciTGMYOfVGQAtBGBnx6Wqa",NULL,"0",NULL,"STAFF"
+"3","1500","member@starview.com","VIP Member","$2a$10$IP9Gjld3577tlf3evkfPneUmCiCFA/dzdN38QUhPbYDx3hEcgmi0a",NULL,"0",NULL,"MEMBER"
