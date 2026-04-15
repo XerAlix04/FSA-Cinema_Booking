@@ -1,0 +1,99 @@
+Project "StarView Cinemas" {
+  database_type: 'MySQL'
+  Note: 'Online Booking System DB Schema'
+}
+
+Table NGUOI_DUNG {
+  id integer [primary key, increment]
+  ho_ten varchar [not null]
+  email varchar [unique, not null]
+  mat_khau varchar [not null]
+  so_dien_thoai varchar
+  ngay_sinh date
+  vai_tro varchar [not null, note: 'ADMIN, STAFF, MEMBER']
+  diem_tich_luy integer [default: 0, not null]
+  phien_ban integer [note: '@Version Optimistic Lock']
+}
+
+Table KHUYEN_MAI {
+  id integer [primary key, increment]
+  ma_khuyen_mai varchar [unique, not null]
+  loai varchar(20) [not null, note: 'PERCENT or FLAT']
+  gia_tri float [not null]
+  max_giam_gia float
+  ngay_het_han datetime [not null]
+  gioi_han_su_dung integer [not null]
+  da_su_dung integer [not null, default: 0]
+  danh_cho_thanh_vien_moi boolean [not null, default: false]
+  phien_ban integer [note: '@Version Optimistic Lock']
+}
+
+Table DICH_VU_BAN_KEM {
+  id integer [primary key, increment]
+  ten_dich_vu varchar [not null]
+  diem_doi integer [not null]
+  hinh_anh_url varchar
+}
+
+Table DON_HANG {
+  id integer [primary key, increment]
+  nguoi_dung_id integer [null, note: 'Null for Guest checkouts']
+  khuyen_mai_id integer [null]
+  email_khach_hang varchar [not null]
+  sdt_khach_hang varchar [not null]
+  tong_tien float [not null]
+  tong_tien_goc float
+  trang_thai_thanh_toan varchar(50) [not null, note: 'PENDING, SUCCESS, FAILED']
+  thoi_gian_tao datetime [not null]
+  danh_sach_ghe varchar [note: 'e.g., A1, A2']
+  danh_sach_dich_vu varchar [note: 'e.g., Combo Solo x1']
+  tong_diem_su_dung integer [not null, default: 0]
+}
+
+Table PHIM {
+  id integer [primary key, increment]
+  ten_phim varchar [not null]
+  gia_goc float [not null]
+  thoi_luong_phut integer [not null]
+  trailer_url varchar
+  poster_url varchar
+  danh_gia float
+  the_loai varchar
+  mo_ta varchar
+  is_active boolean [not null, default: true]
+}
+
+Table PHONG_CHIEU {
+  id integer [primary key, increment]
+  ten_phong varchar [not null]
+  tong_so_ghe integer [not null]
+  loai_phong varchar(50) [default: '2D']
+  phu_thu float [not null, default: 0.0]
+}
+
+Table SUAT_CHIEU {
+  id integer [primary key, increment]
+  phim_id integer [not null]
+  phong_chieu_id integer [not null]
+  thoi_gian_chieu datetime [not null]
+  he_so_gia float [not null]
+}
+
+Table GHE_SUAT_CHIEU {
+  id integer [primary key, increment]
+  suat_chieu_id integer [not null]
+  don_hang_id integer [null]
+  loai_ghe varchar(50) [not null, note: 'THUONG, VIP, SWEETBOX']
+  trang_thai varchar(50) [not null, note: 'TRONG, DANG_CHO, DA_BAN']
+  thoi_gian_het_han_giu_cho datetime [null]
+  phien_giao_dich varchar [null, note: 'Session ID tracking']
+  phien_ban integer [not null, note: '@Version Optimistic Lock']
+}
+
+// Relationships
+Ref: DON_HANG.nguoi_dung_id > NGUOI_DUNG.id
+Ref: DON_HANG.khuyen_mai_id > KHUYEN_MAI.id
+Ref: SUAT_CHIEU.phim_id > PHIM.id
+Ref: SUAT_CHIEU.phong_chieu_id > PHONG_CHIEU.id
+Ref: GHE_SUAT_CHIEU.suat_chieu_id > SUAT_CHIEU.id
+Ref: GHE_SUAT_CHIEU.don_hang_id > DON_HANG.id
